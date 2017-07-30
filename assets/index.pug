@@ -1,0 +1,28 @@
+doctype html
+
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    title
+    link(rel="stylesheet", href="lib/bootstrap.min.css")
+    link(rel="stylesheet", href="css/style.css")
+    script(src="js/index.js", defer)
+  body
+    div
+      div
+        .container-fluid(data-component="phone-page")
+          .row
+            .col-md-2
+              // Sidebar content
+              p
+                | Search:
+                input
+              p
+                | Sort by:
+                select
+                  option(value="name") Alphabetical
+                  option(value="age") Newest
+            .col-md-10
+              // Body content
+              div(data-component="phone-catalogue")
+              div(data-component="phone-details")
