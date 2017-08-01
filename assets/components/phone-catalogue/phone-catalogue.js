@@ -8,11 +8,19 @@ export default class PhoneCatalogue {
     this._phones = options.phones;
 
     this._render();
+
+    this._element.addEventListener('click', this._onPhoneClick);
   }
 
   _render() {
     this._element.innerHTML = compiledTemplate({
       phones: this._phones
     });
+  }
+
+  _onPhoneClick(e) {
+    let selected = e.target.closest('[data-element="phone-item"]');
+
+    alert(selected.dataset.phoneId);
   }
 }

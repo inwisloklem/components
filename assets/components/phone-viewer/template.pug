@@ -1,0 +1,10 @@
+img.phone(src= phone.images[0])
+  
+h1= phone.name
+
+p= phone.description
+
+ul.phone-thumbs
+  each image in phone.images
+    li
+      img(src= image)

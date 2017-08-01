@@ -1,6 +1,6 @@
 ul.phones
   each phone in phones
-    li.thumbnail
+    li.thumbnail(data-element="phone-item", data-phone-id= phone.id)
       a.thumb(href= `#!/phones/${phone.id}`)
         img(
           alt= phone.name,

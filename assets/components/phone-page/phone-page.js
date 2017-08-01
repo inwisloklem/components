@@ -1,10 +1,16 @@
 'use strict';
 
 import PhoneCatalogue from '../phone-catalogue/phone-catalogue';
+import PhoneViewer from '../phone-viewer/phone-viewer';
 
 export default class PhonePage {
   constructor(options) {
     this._element = options.element;
+
+    this._viewer = new PhoneViewer({
+      element: this._element.querySelector('[data-component="phone-viewer"]'),
+      phoneDetails: phoneFromServer
+    });
 
     this._catalogue = new PhoneCatalogue({
       element: this._element.querySelector('[data-component="phone-catalogue"]'),
@@ -168,3 +174,15 @@ const phonesFromServer = [
     'snippet': 'Motorola CHARM fits easily in your pocket or palm.  Includes MOTOBLUR service.'
   }
 ];
+
+const phoneFromServer = {
+  'name': 'Dell Streak 7',
+  'images': [
+    'img/phones/dell-streak-7.0.jpg',
+    'img/phones/dell-streak-7.1.jpg',
+    'img/phones/dell-streak-7.2.jpg',
+    'img/phones/dell-streak-7.3.jpg',
+    'img/phones/dell-streak-7.4.jpg'
+  ],
+  'description': 'Introducing Dell\u2122 Streak 7. Share photos, videos and movies together. It\u2019s small enough to carry around, big enough to gather around. Android\u2122 2.2-based tablet with over-the-air upgrade capability for future OS releases.  A vibrant 7-inch, multitouch display with full Adobe\u00ae Flash 10.1 pre-installed.  Includes a 1.3 MP front-facing camera for face-to-face chats on popular services such as Qik or Skype.  16 GB of internal storage, plus Wi-Fi, Bluetooth and built-in GPS keeps you in touch with the world around you.  Connect on your terms. Save with 2-year contract or flexibility with prepaid pay-as-you-go plans',
+};

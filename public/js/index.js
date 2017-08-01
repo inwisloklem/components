@@ -374,6 +374,8 @@ module.exports = template;
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__phone_catalogue_phone_catalogue__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__phone_viewer_phone_viewer__ = __webpack_require__(8);
+
 
 
 
@@ -381,6 +383,11 @@ module.exports = template;
 class PhonePage {
   constructor(options) {
     this._element = options.element;
+
+    this._viewer = new __WEBPACK_IMPORTED_MODULE_1__phone_viewer_phone_viewer__["a" /* default */]({
+      element: this._element.querySelector('[data-component="phone-viewer"]'),
+      phoneDetails: phoneFromServer
+    });
 
     this._catalogue = new __WEBPACK_IMPORTED_MODULE_0__phone_catalogue_phone_catalogue__["a" /* default */]({
       element: this._element.querySelector('[data-component="phone-catalogue"]'),
@@ -547,6 +554,18 @@ const phonesFromServer = [
   }
 ];
 
+const phoneFromServer = {
+  'name': 'Dell Streak 7',
+  'images': [
+    'img/phones/dell-streak-7.0.jpg',
+    'img/phones/dell-streak-7.1.jpg',
+    'img/phones/dell-streak-7.2.jpg',
+    'img/phones/dell-streak-7.3.jpg',
+    'img/phones/dell-streak-7.4.jpg'
+  ],
+  'description': 'Introducing Dell\u2122 Streak 7. Share photos, videos and movies together. It\u2019s small enough to carry around, big enough to gather around. Android\u2122 2.2-based tablet with over-the-air upgrade capability for future OS releases.  A vibrant 7-inch, multitouch display with full Adobe\u00ae Flash 10.1 pre-installed.  Includes a 1.3 MP front-facing camera for face-to-face chats on popular services such as Qik or Skype.  16 GB of internal storage, plus Wi-Fi, Bluetooth and built-in GPS keeps you in touch with the world around you.  Connect on your terms. Save with 2-year contract or flexibility with prepaid pay-as-you-go plans',
+};
+
 
 /***/ }),
 /* 6 */
@@ -565,12 +584,20 @@ class PhoneCatalogue {
     this._phones = options.phones;
 
     this._render();
+
+    this._element.addEventListener('click', this._onPhoneClick);
   }
 
   _render() {
     this._element.innerHTML = __WEBPACK_IMPORTED_MODULE_0__template_pug___default()({
       phones: this._phones
     });
+  }
+
+  _onPhoneClick(e) {
+    let selected = e.target.closest('[data-element="phone-item"]');
+
+    alert(selected.dataset.phoneId);
   }
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = PhoneCatalogue;
@@ -590,14 +617,14 @@ function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;;var l
   if ('number' == typeof $$obj.length) {
       for (var pug_index0 = 0, $$l = $$obj.length; pug_index0 < $$l; pug_index0++) {
         var phone = $$obj[pug_index0];
-pug_html = pug_html + "\u003Cli class=\"thumbnail\"\u003E\u003Ca" + (" class=\"thumb\""+pug.attr("href", `#!/phones/${phone.id}`, true, true)) + "\u003E\u003Cimg" + (pug.attr("alt", phone.name, true, true)+pug.attr("src", phone.imageUrl, true, true)) + "\u003E\u003C\u002Fa\u003E\u003Ca" + (pug.attr("href", `#!/phones/${phone.id}`, true, true)) + "\u003E" + (pug.escape(null == (pug_interp = phone.name) ? "" : pug_interp)) + "\u003C\u002Fa\u003E\u003Cp\u003E" + (pug.escape(null == (pug_interp = phone.snippet) ? "" : pug_interp)) + "\u003C\u002Fp\u003E\u003C\u002Fli\u003E";
+pug_html = pug_html + "\u003Cli" + (" class=\"thumbnail\""+" data-element=\"phone-item\""+pug.attr("data-phone-id", phone.id, true, true)) + "\u003E\u003Ca" + (" class=\"thumb\""+pug.attr("href", `#!/phones/${phone.id}`, true, true)) + "\u003E\u003Cimg" + (pug.attr("alt", phone.name, true, true)+pug.attr("src", phone.imageUrl, true, true)) + "\u003E\u003C\u002Fa\u003E\u003Ca" + (pug.attr("href", `#!/phones/${phone.id}`, true, true)) + "\u003E" + (pug.escape(null == (pug_interp = phone.name) ? "" : pug_interp)) + "\u003C\u002Fa\u003E\u003Cp\u003E" + (pug.escape(null == (pug_interp = phone.snippet) ? "" : pug_interp)) + "\u003C\u002Fp\u003E\u003C\u002Fli\u003E";
       }
   } else {
     var $$l = 0;
     for (var pug_index0 in $$obj) {
       $$l++;
       var phone = $$obj[pug_index0];
-pug_html = pug_html + "\u003Cli class=\"thumbnail\"\u003E\u003Ca" + (" class=\"thumb\""+pug.attr("href", `#!/phones/${phone.id}`, true, true)) + "\u003E\u003Cimg" + (pug.attr("alt", phone.name, true, true)+pug.attr("src", phone.imageUrl, true, true)) + "\u003E\u003C\u002Fa\u003E\u003Ca" + (pug.attr("href", `#!/phones/${phone.id}`, true, true)) + "\u003E" + (pug.escape(null == (pug_interp = phone.name) ? "" : pug_interp)) + "\u003C\u002Fa\u003E\u003Cp\u003E" + (pug.escape(null == (pug_interp = phone.snippet) ? "" : pug_interp)) + "\u003C\u002Fp\u003E\u003C\u002Fli\u003E";
+pug_html = pug_html + "\u003Cli" + (" class=\"thumbnail\""+" data-element=\"phone-item\""+pug.attr("data-phone-id", phone.id, true, true)) + "\u003E\u003Ca" + (" class=\"thumb\""+pug.attr("href", `#!/phones/${phone.id}`, true, true)) + "\u003E\u003Cimg" + (pug.attr("alt", phone.name, true, true)+pug.attr("src", phone.imageUrl, true, true)) + "\u003E\u003C\u002Fa\u003E\u003Ca" + (pug.attr("href", `#!/phones/${phone.id}`, true, true)) + "\u003E" + (pug.escape(null == (pug_interp = phone.name) ? "" : pug_interp)) + "\u003C\u002Fa\u003E\u003Cp\u003E" + (pug.escape(null == (pug_interp = phone.snippet) ? "" : pug_interp)) + "\u003C\u002Fp\u003E\u003C\u002Fli\u003E";
     }
   }
 }).call(this);
@@ -605,5 +632,66 @@ pug_html = pug_html + "\u003Cli class=\"thumbnail\"\u003E\u003Ca" + (" class=\"t
 pug_html = pug_html + "\u003C\u002Ful\u003E";}.call(this,"phones" in locals_for_with?locals_for_with.phones:typeof phones!=="undefined"?phones:undefined));;return pug_html;};
 module.exports = template;
 
+/***/ }),
+/* 8 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__template_pug__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__template_pug___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__template_pug__);
+
+
+
+
+class PhoneViewer {
+  constructor(options) {
+    this._element = options.element;
+
+    this.render(options.phoneDetails);
+  }
+
+  render(phoneDetails) {
+    this._element.innerHTML = __WEBPACK_IMPORTED_MODULE_0__template_pug___default()({
+      phone: phoneDetails
+    });
+  }
+
+  show() {
+    this._element.classList.remove('js-hidden');
+  }
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = PhoneViewer;
+
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var pug = __webpack_require__(0);
+
+function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;;var locals_for_with = (locals || {});(function (phone) {pug_html = pug_html + "\u003Cimg" + (" class=\"phone\""+pug.attr("src", phone.images[0], true, true)) + "\u003E\u003Ch1\u003E" + (pug.escape(null == (pug_interp = phone.name) ? "" : pug_interp)) + "\u003C\u002Fh1\u003E\u003Cp\u003E" + (pug.escape(null == (pug_interp = phone.description) ? "" : pug_interp)) + "\u003C\u002Fp\u003E\u003Cul class=\"phone-thumbs\"\u003E";
+// iterate phone.images
+;(function(){
+  var $$obj = phone.images;
+  if ('number' == typeof $$obj.length) {
+      for (var pug_index0 = 0, $$l = $$obj.length; pug_index0 < $$l; pug_index0++) {
+        var image = $$obj[pug_index0];
+pug_html = pug_html + "\u003Cli\u003E\u003Cimg" + (pug.attr("src", image, true, true)) + "\u003E\u003C\u002Fli\u003E";
+      }
+  } else {
+    var $$l = 0;
+    for (var pug_index0 in $$obj) {
+      $$l++;
+      var image = $$obj[pug_index0];
+pug_html = pug_html + "\u003Cli\u003E\u003Cimg" + (pug.attr("src", image, true, true)) + "\u003E\u003C\u002Fli\u003E";
+    }
+  }
+}).call(this);
+
+pug_html = pug_html + "\u003C\u002Ful\u003E";}.call(this,"phone" in locals_for_with?locals_for_with.phone:typeof phone!=="undefined"?phone:undefined));;return pug_html;};
+module.exports = template;
+
 /***/ })
 /******/ ]);
+//# sourceMappingURL=index.js.map

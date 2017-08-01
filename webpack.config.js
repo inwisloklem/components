@@ -1,9 +1,10 @@
 const path = require('path');
 
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
-const pug = new ExtractTextPlugin('../index.html');
-const css = new ExtractTextPlugin('../css/style.css');
+const index = new ExtractTextPlugin('../index.html');
+const style = new ExtractTextPlugin('../css/style.css');
 
 module.exports = {
   entry: './assets/index.js',
@@ -17,27 +18,28 @@ module.exports = {
       use: 'pug-loader'
     },
     {
-      test: /\index.pug$/,
-      use: pug.extract(['raw-loader', 'pug-html-loader'])
+      test: /index\.pug/,
+      use: index.extract(['raw-loader', 'pug-html-loader'])
     },
     {
       test: /\.css$/,
-      use: css.extract(['css-loader'])
+      use: style.extract(['css-loader'])
     }]
   },
   plugins: [
-    pug,
-    css
+    index,
+    style,
+    new BrowserSyncPlugin({
+      host: 'localhost',
+      port: 3000,
+      server: {
+        baseDir: ['public']
+      }
+    })
   ],
-  devtool: 'source-map',
+  devtool: 'source-maps',
+  watch: true,
   watchOptions: {
-    aggregateTimeout: 300,
-    poll: 1000
-  },
-  devServer: {
-    hot: true,
-    inline: true,
-    contentBase: path.resolve(__dirname, 'public'),
-    publicPath: '/'
+    aggregateTimeout: 100
   }
 };
