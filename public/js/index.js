@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -298,7 +298,7 @@ function pug_rethrow(err, filename, lineno, str){
     throw err;
   }
   try {
-    str = str || __webpack_require__(3).readFileSync(filename, 'utf8')
+    str = str || __webpack_require__(4).readFileSync(filename, 'utf8')
   } catch (ex) {
     pug_rethrow(err, null, lineno)
   }
@@ -329,12 +329,38 @@ function pug_rethrow(err, filename, lineno, str){
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+
+
+const HIDDEN = 'js-hidden';
+
+class Component {
+  constructor(options) {
+    this._element = options.element;
+  }
+
+  show() {
+    this._element.classList.remove(HIDDEN);
+  }
+
+  hide() {
+    this._element.classList.add(HIDDEN);
+  }
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Component;
+
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__index_pug__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__index_pug__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__index_pug___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__index_pug__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__css_style_css__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__css_style_css__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__css_style_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__css_style_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_phone_page_phone_page__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_phone_page_phone_page__ = __webpack_require__(6);
 
 
 
@@ -348,7 +374,7 @@ new __WEBPACK_IMPORTED_MODULE_2__components_phone_page_phone_page__["a" /* defau
 
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var pug = __webpack_require__(0);
@@ -357,24 +383,24 @@ function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_ht
 module.exports = template;
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports) {
 
 /* (ignored) */
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__phone_catalogue_phone_catalogue__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__phone_viewer_phone_viewer__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__phone_catalogue_phone_catalogue__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__phone_viewer_phone_viewer__ = __webpack_require__(9);
 
 
 
@@ -396,6 +422,9 @@ class PhonePage {
 
     this._onPhoneSelected = this._onPhoneSelected.bind(this);
     this._catalogue._element.addEventListener('phoneSelected', this._onPhoneSelected);
+
+    this._onPhoneViewerBack = this._onPhoneViewerBack.bind(this);
+    this._viewer._element.addEventListener('click', this._onPhoneViewerBack);
   }
 
   _onPhoneSelected() {
@@ -404,6 +433,13 @@ class PhonePage {
 
     this._viewer.show();
     this._catalogue.hide();
+  }
+
+  _onPhoneViewerBack(e) {
+    if (e.target.dataset.element !== 'back-button') return;
+
+    this._viewer.hide();
+    this._catalogue.show();
   }
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = PhonePage;
@@ -579,12 +615,12 @@ const phoneFromServer = {
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__component_component__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__template_pug__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__component_component__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__template_pug__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__template_pug___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__template_pug__);
 
 
@@ -626,7 +662,7 @@ class PhoneCatalogue extends __WEBPACK_IMPORTED_MODULE_0__component_component__[
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var pug = __webpack_require__(0);
@@ -654,12 +690,12 @@ pug_html = pug_html + "\u003C\u002Ful\u003E";}.call(this,"phones" in locals_for_
 module.exports = template;
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__component_component__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__template_pug__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__component_component__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__template_pug__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__template_pug___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__template_pug__);
 
 
@@ -684,7 +720,7 @@ class PhoneViewer extends __WEBPACK_IMPORTED_MODULE_0__component_component__["a"
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var pug = __webpack_require__(0);
@@ -708,35 +744,8 @@ pug_html = pug_html + "\u003Cli\u003E\u003Cimg" + (pug.attr("src", image, true, 
   }
 }).call(this);
 
-pug_html = pug_html + "\u003C\u002Ful\u003E";}.call(this,"phone" in locals_for_with?locals_for_with.phone:typeof phone!=="undefined"?phone:undefined));;return pug_html;};
+pug_html = pug_html + "\u003C\u002Ful\u003E\u003Cbutton class=\"btn\" type=\"submit\" data-element=\"back-button\"\u003EBack\u003C\u002Fbutton\u003E";}.call(this,"phone" in locals_for_with?locals_for_with.phone:typeof phone!=="undefined"?phone:undefined));;return pug_html;};
 module.exports = template;
-
-/***/ }),
-/* 10 */,
-/* 11 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-
-const HIDDEN = 'js-hidden';
-
-class Component {
-  constructor(options) {
-    this._element = options.element;
-  }
-
-  show() {
-    this._element.classList.remove(HIDDEN);
-  }
-
-  hide() {
-    this._element.classList.add(HIDDEN);
-  }
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = Component;
-
-
 
 /***/ })
 /******/ ]);

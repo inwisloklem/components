@@ -19,6 +19,9 @@ export default class PhonePage {
 
     this._onPhoneSelected = this._onPhoneSelected.bind(this);
     this._catalogue._element.addEventListener('phoneSelected', this._onPhoneSelected);
+
+    this._onPhoneViewerBack = this._onPhoneViewerBack.bind(this);
+    this._viewer._element.addEventListener('click', this._onPhoneViewerBack);
   }
 
   _onPhoneSelected() {
@@ -27,6 +30,13 @@ export default class PhonePage {
 
     this._viewer.show();
     this._catalogue.hide();
+  }
+
+  _onPhoneViewerBack(e) {
+    if (e.target.dataset.element !== 'back-button') return;
+
+    this._viewer.hide();
+    this._catalogue.show();
   }
 }
 

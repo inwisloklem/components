@@ -95,3 +95,24 @@ h1 {
 .js-hidden {
   display: none;
 }
+
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 30px;
+  height: 40px;
+  border-radius: 3px;
+  border: 1px solid #000;
+  background-color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: lowercase;
+  cursor: pointer;
+  transition: all 0.2s ease-in;
+}
+
+.btn:hover {
+  color: #fff;
+  background-color: #000;
+}
