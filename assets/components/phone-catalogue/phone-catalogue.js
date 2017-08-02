@@ -1,14 +1,16 @@
 'use strict';
 
+import Component from '../component/component';
 import compiledTemplate from './template.pug';
 
-export default class PhoneCatalogue {
+export default class PhoneCatalogue extends Component {
   constructor(options) {
-    this._element = options.element;
-    this._phones = options.phones;
+    super(options);
 
+    this._phones = options.phones;
     this._render();
 
+    this._onPhoneClick = this._onPhoneClick.bind(this);
     this._element.addEventListener('click', this._onPhoneClick);
   }
 
@@ -19,8 +21,15 @@ export default class PhoneCatalogue {
   }
 
   _onPhoneClick(e) {
-    let selected = e.target.closest('[data-element="phone-item"]');
+    e.preventDefault();
 
-    alert(selected.dataset.phoneId);
+    let phone = e.target.closest('[data-element="phone-item"]');
+    if (!phone) return;
+
+    let phoneSelectedEvent = new CustomEvent('phoneSelected', {
+      detail: phone.dataset.phoneId
+    });
+
+    this._element.dispatchEvent(phoneSelectedEvent);
   }
 }

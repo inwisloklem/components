@@ -16,6 +16,17 @@ export default class PhonePage {
       element: this._element.querySelector('[data-component="phone-catalogue"]'),
       phones: phonesFromServer
     });
+
+    this._onPhoneSelected = this._onPhoneSelected.bind(this);
+    this._catalogue._element.addEventListener('phoneSelected', this._onPhoneSelected);
+  }
+
+  _onPhoneSelected() {
+    let phoneDetails = phoneFromServer;
+    this._viewer.render(phoneDetails);
+
+    this._viewer.show();
+    this._catalogue.hide();
   }
 }
 

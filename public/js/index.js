@@ -393,6 +393,17 @@ class PhonePage {
       element: this._element.querySelector('[data-component="phone-catalogue"]'),
       phones: phonesFromServer
     });
+
+    this._onPhoneSelected = this._onPhoneSelected.bind(this);
+    this._catalogue._element.addEventListener('phoneSelected', this._onPhoneSelected);
+  }
+
+  _onPhoneSelected() {
+    let phoneDetails = phoneFromServer;
+    this._viewer.render(phoneDetails);
+
+    this._viewer.show();
+    this._catalogue.hide();
   }
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = PhonePage;
@@ -572,32 +583,42 @@ const phoneFromServer = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__template_pug__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__template_pug___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__template_pug__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__component_component__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__template_pug__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__template_pug___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__template_pug__);
 
 
 
 
-class PhoneCatalogue {
+
+class PhoneCatalogue extends __WEBPACK_IMPORTED_MODULE_0__component_component__["a" /* default */] {
   constructor(options) {
-    this._element = options.element;
-    this._phones = options.phones;
+    super(options);
 
+    this._phones = options.phones;
     this._render();
 
+    this._onPhoneClick = this._onPhoneClick.bind(this);
     this._element.addEventListener('click', this._onPhoneClick);
   }
 
   _render() {
-    this._element.innerHTML = __WEBPACK_IMPORTED_MODULE_0__template_pug___default()({
+    this._element.innerHTML = __WEBPACK_IMPORTED_MODULE_1__template_pug___default()({
       phones: this._phones
     });
   }
 
   _onPhoneClick(e) {
-    let selected = e.target.closest('[data-element="phone-item"]');
+    e.preventDefault();
 
-    alert(selected.dataset.phoneId);
+    let phone = e.target.closest('[data-element="phone-item"]');
+    if (!phone) return;
+
+    let phoneSelectedEvent = new CustomEvent('phoneSelected', {
+      detail: phone.dataset.phoneId
+    });
+
+    this._element.dispatchEvent(phoneSelectedEvent);
   }
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = PhoneCatalogue;
@@ -637,27 +658,25 @@ module.exports = template;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__template_pug__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__template_pug___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__template_pug__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__component_component__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__template_pug__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__template_pug___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__template_pug__);
 
 
 
 
-class PhoneViewer {
+
+class PhoneViewer extends __WEBPACK_IMPORTED_MODULE_0__component_component__["a" /* default */] {
   constructor(options) {
-    this._element = options.element;
+    super(options);
 
     this.render(options.phoneDetails);
   }
 
   render(phoneDetails) {
-    this._element.innerHTML = __WEBPACK_IMPORTED_MODULE_0__template_pug___default()({
+    this._element.innerHTML = __WEBPACK_IMPORTED_MODULE_1__template_pug___default()({
       phone: phoneDetails
     });
-  }
-
-  show() {
-    this._element.classList.remove('js-hidden');
   }
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = PhoneViewer;
@@ -691,6 +710,33 @@ pug_html = pug_html + "\u003Cli\u003E\u003Cimg" + (pug.attr("src", image, true, 
 
 pug_html = pug_html + "\u003C\u002Ful\u003E";}.call(this,"phone" in locals_for_with?locals_for_with.phone:typeof phone!=="undefined"?phone:undefined));;return pug_html;};
 module.exports = template;
+
+/***/ }),
+/* 10 */,
+/* 11 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+
+const HIDDEN = 'js-hidden';
+
+class Component {
+  constructor(options) {
+    this._element = options.element;
+  }
+
+  show() {
+    this._element.classList.remove(HIDDEN);
+  }
+
+  hide() {
+    this._element.classList.add(HIDDEN);
+  }
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Component;
+
+
 
 /***/ })
 /******/ ]);

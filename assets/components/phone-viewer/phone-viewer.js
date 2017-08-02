@@ -1,10 +1,11 @@
 'use strict';
 
+import Component from '../component/component';
 import compiledTemplate from './template.pug';
 
-export default class PhoneViewer {
+export default class PhoneViewer extends Component {
   constructor(options) {
-    this._element = options.element;
+    super(options);
 
     this.render(options.phoneDetails);
   }
@@ -13,9 +14,5 @@ export default class PhoneViewer {
     this._element.innerHTML = compiledTemplate({
       phone: phoneDetails
     });
-  }
-
-  show() {
-    this._element.classList.remove('js-hidden');
   }
 }
