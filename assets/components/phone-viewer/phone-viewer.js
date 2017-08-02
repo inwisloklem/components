@@ -6,8 +6,6 @@ import compiledTemplate from './template.pug';
 export default class PhoneViewer extends Component {
   constructor(options) {
     super(options);
-
-    this.render(options.phoneDetails);
   }
 
   render(phoneDetails) {

@@ -14,4 +14,19 @@ export default class Component {
   hide() {
     this._element.classList.add(HIDDEN);
   }
+
+  on(eventName, callback, dataElement = '') {
+    this._element.addEventListener(eventName, e => {
+      if (dataElement && e.target.dataset.element !== dataElement) return;
+
+      callback(e);
+    });
+  }
+
+  trigger(eventName, data = null) {
+    this._element.dispatchEvent(new CustomEvent(eventName, {
+      bubbles: false,
+      detail: data
+    }));
+  }
 }

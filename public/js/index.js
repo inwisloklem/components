@@ -345,6 +345,21 @@ class Component {
   hide() {
     this._element.classList.add(HIDDEN);
   }
+
+  on(eventName, callback, dataElement = '') {
+    this._element.addEventListener(eventName, e => {
+      if (dataElement && e.target.dataset.element !== dataElement) return;
+
+      callback(e);
+    });
+  }
+
+  trigger(eventName, data = null) {
+    this._element.dispatchEvent(new CustomEvent(eventName, {
+      bubbles: false,
+      detail: data
+    }));
+  }
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = Component;
 
@@ -411,8 +426,7 @@ class PhonePage {
     this._element = options.element;
 
     this._viewer = new __WEBPACK_IMPORTED_MODULE_1__phone_viewer_phone_viewer__["a" /* default */]({
-      element: this._element.querySelector('[data-component="phone-viewer"]'),
-      phoneDetails: phoneFromServer
+      element: this._element.querySelector('[data-component="phone-viewer"]')
     });
 
     this._catalogue = new __WEBPACK_IMPORTED_MODULE_0__phone_catalogue_phone_catalogue__["a" /* default */]({
@@ -421,23 +435,33 @@ class PhonePage {
     });
 
     this._onPhoneSelected = this._onPhoneSelected.bind(this);
-    this._catalogue._element.addEventListener('phoneSelected', this._onPhoneSelected);
+    this._catalogue.on('phoneSelected', this._onPhoneSelected);
 
     this._onPhoneViewerBack = this._onPhoneViewerBack.bind(this);
-    this._viewer._element.addEventListener('click', this._onPhoneViewerBack);
+    this._viewer.on('click', this._onPhoneViewerBack, 'back-button');
   }
 
-  _onPhoneSelected() {
-    let phoneDetails = phoneFromServer;
-    this._viewer.render(phoneDetails);
+  _onPhoneSelected(e) {
+    let phoneId = e.detail;
+
+    let xhr = new XMLHttpRequest();
+
+    // XMLHttpRequest.open(method, url, async)
+    xhr.open('GET', `/data/phones/${phoneId}.json`, false);
+    xhr.send();
+
+    if(xhr.status !== 200) {
+      console.error(`${xhr.status}: ${xhr.statusText}`);
+      return;
+    }
+
+    this._viewer.render(JSON.parse(xhr.response));
 
     this._viewer.show();
     this._catalogue.hide();
   }
 
-  _onPhoneViewerBack(e) {
-    if (e.target.dataset.element !== 'back-button') return;
-
+  _onPhoneViewerBack() {
     this._viewer.hide();
     this._catalogue.show();
   }
@@ -601,18 +625,6 @@ const phonesFromServer = [
   }
 ];
 
-const phoneFromServer = {
-  'name': 'Dell Streak 7',
-  'images': [
-    'img/phones/dell-streak-7.0.jpg',
-    'img/phones/dell-streak-7.1.jpg',
-    'img/phones/dell-streak-7.2.jpg',
-    'img/phones/dell-streak-7.3.jpg',
-    'img/phones/dell-streak-7.4.jpg'
-  ],
-  'description': 'Introducing Dell\u2122 Streak 7. Share photos, videos and movies together. It\u2019s small enough to carry around, big enough to gather around. Android\u2122 2.2-based tablet with over-the-air upgrade capability for future OS releases.  A vibrant 7-inch, multitouch display with full Adobe\u00ae Flash 10.1 pre-installed.  Includes a 1.3 MP front-facing camera for face-to-face chats on popular services such as Qik or Skype.  16 GB of internal storage, plus Wi-Fi, Bluetooth and built-in GPS keeps you in touch with the world around you.  Connect on your terms. Save with 2-year contract or flexibility with prepaid pay-as-you-go plans',
-};
-
 
 /***/ }),
 /* 7 */
@@ -648,13 +660,7 @@ class PhoneCatalogue extends __WEBPACK_IMPORTED_MODULE_0__component_component__[
     e.preventDefault();
 
     let phone = e.target.closest('[data-element="phone-item"]');
-    if (!phone) return;
-
-    let phoneSelectedEvent = new CustomEvent('phoneSelected', {
-      detail: phone.dataset.phoneId
-    });
-
-    this._element.dispatchEvent(phoneSelectedEvent);
+    this.trigger('phoneSelected', phone.dataset.phoneId);
   }
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = PhoneCatalogue;
@@ -705,8 +711,6 @@ module.exports = template;
 class PhoneViewer extends __WEBPACK_IMPORTED_MODULE_0__component_component__["a" /* default */] {
   constructor(options) {
     super(options);
-
-    this.render(options.phoneDetails);
   }
 
   render(phoneDetails) {

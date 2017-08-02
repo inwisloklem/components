@@ -24,12 +24,6 @@ export default class PhoneCatalogue extends Component {
     e.preventDefault();
 
     let phone = e.target.closest('[data-element="phone-item"]');
-    if (!phone) return;
-
-    let phoneSelectedEvent = new CustomEvent('phoneSelected', {
-      detail: phone.dataset.phoneId
-    });
-
-    this._element.dispatchEvent(phoneSelectedEvent);
+    this.trigger('phoneSelected', phone.dataset.phoneId);
   }
 }
