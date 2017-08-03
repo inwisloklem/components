@@ -7,11 +7,16 @@ export default class PhoneCatalogue extends Component {
   constructor(options) {
     super(options);
 
-    this._phones = options.phones;
+    this._phones = [];
     this._render();
 
     this._onPhoneClick = this._onPhoneClick.bind(this);
     this._element.addEventListener('click', this._onPhoneClick);
+  }
+
+  setPhones(phones) {
+    this._phones = phones;
+    this._render();
   }
 
   _render() {
