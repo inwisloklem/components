@@ -8,7 +8,11 @@ export default class PhoneViewer extends Component {
     super(options);
   }
 
-  render(phoneDetails) {
+  setPhone(phoneDetails) {
+    this._render(phoneDetails);
+  }
+
+  _render(phoneDetails) {
     this._element.innerHTML = compiledTemplate({
       phone: phoneDetails
     });

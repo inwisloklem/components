@@ -505,7 +505,8 @@ class PhonePage extends __WEBPACK_IMPORTED_MODULE_0__component_component__["a" /
       element: this._element.querySelector('[data-component="phone-catalogue"]')
     });
 
-    this._asyncFetch('/data/phones.json').then(this._showPhones.bind(this));
+    this._asyncFetch('/data/phones.json')
+      .then(this._showPhones.bind(this));
 
     this._onPhoneSelected = this._onPhoneSelected.bind(this);
     this._catalogue.on('phoneSelected', this._onPhoneSelected);
@@ -518,10 +519,15 @@ class PhonePage extends __WEBPACK_IMPORTED_MODULE_0__component_component__["a" /
     this._catalogue.setPhones(phones);
   }
 
+  _showPhone(phone) {
+    this._viewer.setPhone(phone);
+  }
+
   _onPhoneSelected(e) {
     let phoneId = e.detail;
 
-    this._viewer.render(this._syncRequest(`/data/phones/${phoneId}.json`));
+    this._asyncFetch(`/data/phones/${phoneId}.json`)
+      .then(this._showPhone.bind(this));
 
     this._viewer.show();
     this._catalogue.hide();
@@ -628,7 +634,11 @@ class PhoneViewer extends __WEBPACK_IMPORTED_MODULE_0__component_component__["a"
     super(options);
   }
 
-  render(phoneDetails) {
+  setPhone(phoneDetails) {
+    this._render(phoneDetails);
+  }
+
+  _render(phoneDetails) {
     this._element.innerHTML = __WEBPACK_IMPORTED_MODULE_1__template_pug___default()({
       phone: phoneDetails
     });
