@@ -1,6 +1,7 @@
 'use strict';
 
 import Component from '../component/component';
+import HTTPService from '../service/http.service';
 import PhoneCatalogue from '../phone-catalogue/phone-catalogue';
 import PhoneViewer from '../phone-viewer/phone-viewer';
 
@@ -16,7 +17,7 @@ export default class PhonePage extends Component {
       element: this._element.querySelector('[data-component="phone-catalogue"]')
     });
 
-    this._asyncFetch('/data/phones.json')
+    HTTPService.sendRequest('/data/phones.json')
       .then(this._showPhones.bind(this));
 
     this._onPhoneSelected = this._onPhoneSelected.bind(this);
@@ -37,7 +38,7 @@ export default class PhonePage extends Component {
   _onPhoneSelected(e) {
     let phoneId = e.detail;
 
-    this._asyncFetch(`/data/phones/${phoneId}.json`)
+    HTTPService.sendRequest(`/data/phones/${phoneId}.json`)
       .then(this._showPhone.bind(this));
 
     this._viewer.show();

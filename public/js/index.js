@@ -338,76 +338,6 @@ class Component {
     this._element = options.element;
   }
 
-  _syncRequest(url) {
-    let xhr = new XMLHttpRequest();
-
-    // XMLHttpRequest.open(method, url, async)
-    xhr.open('GET', url, false);
-    xhr.send();
-
-    if (xhr.status !== 200) {
-      console.error(`${xhr.status}: ${xhr.statusText}`);
-      return;
-    }
-
-    return JSON.parse(xhr.response);
-  }
-
-  _asyncRequest(url, successCallback) {
-    let xhr = new XMLHttpRequest();
-
-    // XMLHttpRequest.open(method, url, async)
-    xhr.open('GET', url, true);
-    xhr.send();
-
-    xhr.addEventListener('error', () => {
-      console.error(xhr.status);
-    });
-
-    xhr.addEventListener('load', () => {
-      if (xhr.status !== 200) {
-        console.error(`${xhr.status}: ${xhr.statusText}`);
-        return;
-      }
-
-      successCallback(JSON.parse(xhr.response));
-    });
-  }
-
-  _asyncPromise(url) {
-    return new Promise((resolve, reject) => {
-      let xhr = new XMLHttpRequest();
-
-      // XMLHttpRequest.open(method, url, async)
-      xhr.open('GET', url, true);
-      xhr.send();
-
-      xhr.addEventListener('error', () => {
-        reject(`${xhr.status}: ${xhr.statusText}`);
-      });
-
-      xhr.addEventListener('load', () => {
-        if (xhr.status !== 200) {
-          reject(`${xhr.status}: ${xhr.statusText}`);
-          return;
-        }
-
-        resolve(JSON.parse(xhr.response));
-      });
-    });
-  }
-
-  _asyncFetch(url) {
-    return fetch(url).then(response => {
-      if (!response.ok) {
-        console.error(`${response.status}: ${response.statusText}`);
-        return;
-      }
-
-      return response.json();
-    });
-  }
-
   show() {
     this._element.classList.remove(HIDDEN);
   }
@@ -485,8 +415,10 @@ module.exports = template;
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__component_component__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__phone_catalogue_phone_catalogue__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__phone_viewer_phone_viewer__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__service_http_service__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__phone_catalogue_phone_catalogue__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__phone_viewer_phone_viewer__ = __webpack_require__(9);
+
 
 
 
@@ -497,15 +429,15 @@ class PhonePage extends __WEBPACK_IMPORTED_MODULE_0__component_component__["a" /
   constructor(options) {
     super(options);
 
-    this._viewer = new __WEBPACK_IMPORTED_MODULE_2__phone_viewer_phone_viewer__["a" /* default */]({
+    this._viewer = new __WEBPACK_IMPORTED_MODULE_3__phone_viewer_phone_viewer__["a" /* default */]({
       element: this._element.querySelector('[data-component="phone-viewer"]')
     });
 
-    this._catalogue = new __WEBPACK_IMPORTED_MODULE_1__phone_catalogue_phone_catalogue__["a" /* default */]({
+    this._catalogue = new __WEBPACK_IMPORTED_MODULE_2__phone_catalogue_phone_catalogue__["a" /* default */]({
       element: this._element.querySelector('[data-component="phone-catalogue"]')
     });
 
-    this._asyncFetch('/data/phones.json')
+    __WEBPACK_IMPORTED_MODULE_1__service_http_service__["a" /* default */].sendRequest('/data/phones.json')
       .then(this._showPhones.bind(this));
 
     this._onPhoneSelected = this._onPhoneSelected.bind(this);
@@ -526,7 +458,7 @@ class PhonePage extends __WEBPACK_IMPORTED_MODULE_0__component_component__["a" /
   _onPhoneSelected(e) {
     let phoneId = e.detail;
 
-    this._asyncFetch(`/data/phones/${phoneId}.json`)
+    __WEBPACK_IMPORTED_MODULE_1__service_http_service__["a" /* default */].sendRequest(`/data/phones/${phoneId}.json`)
       .then(this._showPhone.bind(this));
 
     this._viewer.show();
@@ -675,6 +607,30 @@ pug_html = pug_html + "\u003Cli\u003E\u003Cimg" + (pug.attr("src", image, true, 
 
 pug_html = pug_html + "\u003C\u002Ful\u003E\u003Cbutton class=\"btn\" type=\"submit\" data-element=\"back-button\"\u003EBack\u003C\u002Fbutton\u003E";}.call(this,"phone" in locals_for_with?locals_for_with.phone:typeof phone!=="undefined"?phone:undefined));;return pug_html;};
 module.exports = template;
+
+/***/ }),
+/* 11 */,
+/* 12 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+
+class HTTPService {
+  static sendRequest(url) {
+    return fetch(url).then(response => {
+      if (!response.ok) {
+        console.error(`${response.status}: ${response.statusText}`);
+        return;
+      }
+
+      return response.json();
+    });
+  }
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = HTTPService;
+
+
 
 /***/ })
 /******/ ]);
