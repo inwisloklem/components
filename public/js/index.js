@@ -374,6 +374,40 @@ class Component {
     });
   }
 
+  _asyncPromise(url) {
+    return new Promise((resolve, reject) => {
+      let xhr = new XMLHttpRequest();
+
+      // XMLHttpRequest.open(method, url, async)
+      xhr.open('GET', url, true);
+      xhr.send();
+
+      xhr.addEventListener('error', () => {
+        reject(`${xhr.status}: ${xhr.statusText}`);
+      });
+
+      xhr.addEventListener('load', () => {
+        if (xhr.status !== 200) {
+          reject(`${xhr.status}: ${xhr.statusText}`);
+          return;
+        }
+
+        resolve(JSON.parse(xhr.response));
+      });
+    });
+  }
+
+  _asyncFetch(url) {
+    return fetch(url).then(response => {
+      if (!response.ok) {
+        console.error(`${response.status}: ${response.statusText}`);
+        return;
+      }
+
+      return response.json();
+    });
+  }
+
   show() {
     this._element.classList.remove(HIDDEN);
   }
@@ -384,7 +418,7 @@ class Component {
 
   on(eventName, callback, dataElement = '') {
     this._element.addEventListener(eventName, e => {
-      if (dataElement && e.target.dataset.element !== dataElement) return;
+      if (dataElement && !e.target.closest(`[data-element="${dataElement}"]`)) return;
 
       callback(e);
     });
@@ -471,7 +505,7 @@ class PhonePage extends __WEBPACK_IMPORTED_MODULE_0__component_component__["a" /
       element: this._element.querySelector('[data-component="phone-catalogue"]')
     });
 
-    this._asyncRequest('/data/phones.json', this._showPhones.bind(this));
+    this._asyncFetch('/data/phones.json').then(this._showPhones.bind(this));
 
     this._onPhoneSelected = this._onPhoneSelected.bind(this);
     this._catalogue.on('phoneSelected', this._onPhoneSelected);

@@ -16,7 +16,7 @@ export default class PhonePage extends Component {
       element: this._element.querySelector('[data-component="phone-catalogue"]')
     });
 
-    this._asyncRequest('/data/phones.json', this._showPhones.bind(this));
+    this._asyncFetch('/data/phones.json').then(this._showPhones.bind(this));
 
     this._onPhoneSelected = this._onPhoneSelected.bind(this);
     this._catalogue.on('phoneSelected', this._onPhoneSelected);

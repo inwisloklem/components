@@ -43,6 +43,40 @@ export default class Component {
     });
   }
 
+  _asyncPromise(url) {
+    return new Promise((resolve, reject) => {
+      let xhr = new XMLHttpRequest();
+
+      // XMLHttpRequest.open(method, url, async)
+      xhr.open('GET', url, true);
+      xhr.send();
+
+      xhr.addEventListener('error', () => {
+        reject(`${xhr.status}: ${xhr.statusText}`);
+      });
+
+      xhr.addEventListener('load', () => {
+        if (xhr.status !== 200) {
+          reject(`${xhr.status}: ${xhr.statusText}`);
+          return;
+        }
+
+        resolve(JSON.parse(xhr.response));
+      });
+    });
+  }
+
+  _asyncFetch(url) {
+    return fetch(url).then(response => {
+      if (!response.ok) {
+        console.error(`${response.status}: ${response.statusText}`);
+        return;
+      }
+
+      return response.json();
+    });
+  }
+
   show() {
     this._element.classList.remove(HIDDEN);
   }
@@ -53,7 +87,7 @@ export default class Component {
 
   on(eventName, callback, dataElement = '') {
     this._element.addEventListener(eventName, e => {
-      if (dataElement && e.target.dataset.element !== dataElement) return;
+      if (dataElement && !e.target.closest(`[data-element="${dataElement}"]`)) return;
 
       callback(e);
     });
